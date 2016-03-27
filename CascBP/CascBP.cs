@@ -47,7 +47,10 @@ namespace CascBP
             { 20779, new OffsData(0x00412B40 - 0x400000, 0x007DB625 - 0x400000) },
             // .text:00412B20                 jz      short loc_412B9A
             // .text:007DB5DF                 cmp     [ebp+var_4AC], 40h
-            { 20886, new OffsData(0x00412B20 - 0x400000, 0x007DB5DF - 0x400000) }
+            { 20886, new OffsData(0x00412B20 - 0x400000, 0x007DB5DF - 0x400000) },
+            // .text:004131C6 74 78                             jz      short loc_413240
+            // .text:007DB4C7 83 BD 54 FB FF FF+                cmp     [ebp+var_4AC], 40h
+            { 21355, new OffsData(0x004131C6 - 0x400000, 0x007DB4C7 - 0x400000) },
         };
 
         class CascBreakpoint : WowBreakpoint
@@ -84,9 +87,9 @@ namespace CascBP
             // Script_FocusUnit
             // .text:00D901BD 8B EC                          mov     ebp, esp
 
-            // .text:00D8EFF5 83 C4 10                       add     esp, 16
+            // .text:00D8F0F2                 add     esp, 10h
             public TestBp()
-                : base(0x00D8EFF5 - 0x400000)
+                : base(0x00D8F0F2 - 0x400000)
             {
             }
             public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
@@ -131,7 +134,7 @@ namespace CascBP
                     if (data.PortraitOffset != 0)
                         breakpoints.Add(new PortraitBreakpoint(data.PortraitOffset));
                     //breakpoints.Add(new LodBreakpoint(0x00982A9A - 0x400000));
-                    //breakpoints.Add(new TestBp());
+                    breakpoints.Add(new TestBp());
                 }
                 else
                 {
