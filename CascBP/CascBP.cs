@@ -87,9 +87,9 @@ namespace CascBP
             // Script_FocusUnit
             // .text:00D901BD 8B EC                          mov     ebp, esp
 
-            // .text:00D8F0F2                 add     esp, 10h
+            // .text:00D48CD4 83 C4 10                             add     esp, 10h
             public TestBp()
-                : base(0x00D8F0F2 - 0x400000)
+                : base(0x00D48CD4 - 0x400000)
             {
             }
             public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
