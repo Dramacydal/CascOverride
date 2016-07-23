@@ -51,6 +51,12 @@ namespace CascBP
             // .text:004131C6 74 78                             jz      short loc_413240
             // .text:007DB4C7 83 BD 54 FB FF FF+                cmp     [ebp+var_4AC], 40h
             { 21355, new OffsData(0x004131C6 - 0x400000, 0x007DB4C7 - 0x400000) },
+            // .text:004131C6 74 78                             jz      short loc_413240
+            // .text:007DB478 83 BD 54 FB FF FF+                cmp     [ebp+var_4AC], 40h
+            { 21463, new OffsData(0x004131C6 - 0x400000, 0x007DB478 - 0x400000) },
+            // .text:004131C6 74 78                             jz      short loc_413240
+            // .text:007DB478 83 BD 54 FB FF FF 40              cmp     [ebp+var_4AC], 40h
+            { 21742, new OffsData(0x004131C6 - 0x400000, 0x007DB478 - 0x400000) },
         };
 
         class CascBreakpoint : WowBreakpoint
@@ -85,9 +91,7 @@ namespace CascBP
         class TestBp : WowBreakpoint
         {
             // Script_FocusUnit
-            // .text:00D901BD 8B EC                          mov     ebp, esp
-
-            // .text:00D48CD4 83 C4 10                             add     esp, 10h
+            // .text:00D48CD4 83 C4 10                          add     esp, 10h
             public TestBp()
                 : base(0x00D48CD4 - 0x400000)
             {
@@ -134,7 +138,7 @@ namespace CascBP
                     if (data.PortraitOffset != 0)
                         breakpoints.Add(new PortraitBreakpoint(data.PortraitOffset));
                     //breakpoints.Add(new LodBreakpoint(0x00982A9A - 0x400000));
-                    breakpoints.Add(new TestBp());
+                    //breakpoints.Add(new TestBp());
                 }
                 else
                 {
