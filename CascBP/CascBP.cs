@@ -28,41 +28,27 @@ namespace CascBP
 
         class OffsData
         {
-            public OffsData(int cascOffs, int portraitOffset = 0)
+            public OffsData(int cascOffs1, int cascOffs2, int portraitOffset = 0)
             {
-                CastOffs = cascOffs;
-                PortraitOffset = portraitOffset;
+                CascOffs1 = cascOffs1;
+                CascOffs2 = cascOffs2;
             }
 
-            public int CastOffs { get; private set; }
-            public int PortraitOffset { get; private set; }
+            public int CascOffs1 { get; private set; }
+            public int CascOffs2 { get; private set; }
         }
 
         Dictionary<int, OffsData> BuildDatas = new Dictionary<int, OffsData>()
         {
-            // .text:00412FC0 74 78                          jz      short loc_41303A
-            { 19865, new OffsData(0x00412FC0 - 0x400000) },
-            // .text:00412B40 74 78                          jz      short loc_412BBA
-            // .text:007DB625 83 BD 54 FB FF+                cmp     [ebp+var_4AC], 40h
-            { 20779, new OffsData(0x00412B40 - 0x400000, 0x007DB625 - 0x400000) },
-            // .text:00412B20                 jz      short loc_412B9A
-            // .text:007DB5DF                 cmp     [ebp+var_4AC], 40h
-            { 20886, new OffsData(0x00412B20 - 0x400000, 0x007DB5DF - 0x400000) },
-            // .text:004131C6 74 78                             jz      short loc_413240
-            // .text:007DB4C7 83 BD 54 FB FF FF+                cmp     [ebp+var_4AC], 40h
-            { 21355, new OffsData(0x004131C6 - 0x400000, 0x007DB4C7 - 0x400000) },
-            // .text:004131C6 74 78                             jz      short loc_413240
-            // .text:007DB478 83 BD 54 FB FF FF+                cmp     [ebp+var_4AC], 40h
-            { 21463, new OffsData(0x004131C6 - 0x400000, 0x007DB478 - 0x400000) },
-            // .text:004131C6 74 78                             jz      short loc_413240
-            // .text:007DB478 83 BD 54 FB FF FF 40              cmp     [ebp+var_4AC], 40h
-            { 21742, new OffsData(0x004131C6 - 0x400000, 0x007DB478 - 0x400000) },
+            // .text:004913D1 74 6B                             jz      short loc_49143E
+            // .text:004912D2 0F 84 90 00 00 00                 jz      loc_491368
+            { 22293, new OffsData(0x004913D1 - 0x400000, 0x004912D2 - 0x400000) },
         };
 
-        class CascBreakpoint : WowBreakpoint
+        class CascBreakpoint1 : WowBreakpoint
         {
             protected int JumpOffs { get; private set; }
-            public CascBreakpoint(int offs)
+            public CascBreakpoint1(int offs)
                 : base(offs)
             {
             }
@@ -74,16 +60,17 @@ namespace CascBP
             }
         }
 
-        class PortraitBreakpoint : WowBreakpoint
+        class CascBreakpoint2 : WowBreakpoint
         {
-            public PortraitBreakpoint(int offs)
+            protected int JumpOffs { get; private set; }
+            public CascBreakpoint2(int offs)
                 : base(offs)
             {
             }
 
             public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
             {
-                ctx.Eip += 0x12;
+                ctx.Eip += 6;
                 return true;
             }
         }
@@ -115,7 +102,7 @@ namespace CascBP
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Console.WriteLine("Caught exception");
                 }
@@ -134,11 +121,8 @@ namespace CascBP
 
                 if (data != null)
                 {
-                    breakpoints.Add(new CascBreakpoint(data.CastOffs));
-                    if (data.PortraitOffset != 0)
-                        breakpoints.Add(new PortraitBreakpoint(data.PortraitOffset));
-                    //breakpoints.Add(new LodBreakpoint(0x00982A9A - 0x400000));
-                    //breakpoints.Add(new TestBp());
+                    breakpoints.Add(new CascBreakpoint1(data.CascOffs1));
+                    breakpoints.Add(new CascBreakpoint2(data.CascOffs2));
                 }
                 else
                 {
