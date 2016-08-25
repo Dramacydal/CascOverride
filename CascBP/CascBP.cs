@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using WhiteMagic;
-using WhiteMagic.Patterns;
-using System.Text;
-using System.Linq;
 using WhiteMagic.WinAPI;
 
 namespace CascBP
@@ -43,6 +40,9 @@ namespace CascBP
             // .text:004913D1 74 6B                             jz      short loc_49143E
             // .text:004912D2 0F 84 90 00 00 00                 jz      loc_491368
             { 22293, new OffsData(0x004913D1 - 0x400000, 0x004912D2 - 0x400000) },
+            // .text:004907AE 74 64                             jz      short loc_490814
+            // .text:004906B8 0F 84 8A 00 00 00                 jz      loc_490748
+            { 22423, new OffsData(0x004907AE - 0x400000, 0x004906B8 - 0x400000) },
         };
 
         class CascBreakpoint1 : WowBreakpoint

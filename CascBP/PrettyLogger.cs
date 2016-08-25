@@ -2,7 +2,7 @@
 
 namespace CascBP
 {
-    static class PrettyLogger
+    internal static class PrettyLogger
     {
         public static void SetDefaultColor(ConsoleColor color)
         {
