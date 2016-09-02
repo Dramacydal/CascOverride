@@ -49,6 +49,9 @@ namespace CascBP
             // .text:00490930 74 64                             jz      short loc_490996
             // .text:0049083A 0F 84 8A 00 00 00                 jz      loc_4908CA
             { 22522, new OffsData(0x00490930 - 0x400000, 0x0049083A - 0x400000) },
+            // .text:00490905 74 64                             jz      short loc_49096B
+            // .text:0049080F 0F 84 8A 00 00 00                 jz      loc_49089F
+            { 22566, new OffsData(0x00490905 - 0x400000, 0x0049080F - 0x400000) },
         };
 
         class CascBreakpoint1 : WowBreakpoint
