@@ -52,6 +52,9 @@ namespace CascBP
             // .text:00490905 74 64                             jz      short loc_49096B
             // .text:0049080F 0F 84 8A 00 00 00                 jz      loc_49089F
             { 22566, new OffsData(0x00490905 - 0x400000, 0x0049080F - 0x400000) },
+            // .text:004909E4 74 64                             jz      short loc_490A4A
+            // .text:004908EE 0F 84 8A 00 00 00                 jz      loc_49097E
+            { 22594, new OffsData(0x004909E4 - 0x400000, 0x004908EE - 0x400000) },
         };
 
         class CascBreakpoint1 : WowBreakpoint
@@ -64,6 +67,7 @@ namespace CascBP
 
             public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
             {
+                //Console.WriteLine(pd.ReadASCIIString(pd.ReadPointer(new IntPtr(ctx.Ebp + 8))));
                 ctx.Eip += 2;
                 return true;
             }
