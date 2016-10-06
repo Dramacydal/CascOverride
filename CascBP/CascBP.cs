@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using WhiteMagic;
 using WhiteMagic.WinAPI;
 
@@ -55,6 +56,12 @@ namespace CascBP
             // .text:004909E4 74 64                             jz      short loc_490A4A
             // .text:004908EE 0F 84 8A 00 00 00                 jz      loc_49097E
             { 22594, new OffsData(0x004909E4 - 0x400000, 0x004908EE - 0x400000) },
+            // .text:0049088D 74 64                             jz      short loc_4908F3
+            // .text:00490797 0F 84 8A 00 00 00                 jz      loc_490827
+            { 22624, new OffsData(0x0049088D - 0x400000, 0x00490797 - 0x400000) },
+            // .text:00490853 74 64                                jz      short loc_4908B9
+            // .text:0049075D 0F 84 8A 00 00 00                    jz      loc_4907ED
+            { 22747, new OffsData(0x00490853 - 0x400000, 0x0049075D - 0x400000) },
         };
 
         class CascBreakpoint1 : WowBreakpoint
@@ -65,9 +72,19 @@ namespace CascBP
             {
             }
 
+            List<string> Files = new List<string>();
+
+
             public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
             {
-                //Console.WriteLine(pd.ReadASCIIString(pd.ReadPointer(new IntPtr(ctx.Ebp + 8))));
+                //var path = pd.ReadASCIIString(pd.ReadPointer(new IntPtr(ctx.Ebp + 8)));
+                //if (!Files.Contains(path))
+                {
+                    //Files.Add(path);
+                    //File.AppendAllText("files.txt", path + "\n");
+                }
+
+                //Console.WriteLine(path);
                 ctx.Eip += 2;
                 return true;
             }
