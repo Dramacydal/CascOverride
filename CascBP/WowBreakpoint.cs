@@ -1,13 +1,14 @@
 ﻿using System;
 using WhiteMagic;
-using WhiteMagic.WinAPI.Types;
+using WhiteMagic.Pointers;
+using WhiteMagic.WinAPI;
 
 namespace CascBP
 {
-    public class WowBreakpoint : HardwareBreakPoint
+    public class WowBreakpoint : CodeBreakpoint
     {
-        public WowBreakpoint(int address)
-            : base(new IntPtr(address), 1, BreakpointCondition.Code)
+        public WowBreakpoint(int Offset)
+            : base(new ModulePointer(Offset))
         {
         }
     }

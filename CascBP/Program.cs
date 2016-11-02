@@ -30,16 +30,6 @@ namespace CascBP
         static void Main(string[] args)
         {
             CascBP cascBP = null;
-
-            Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs e) =>
-            {
-                PrettyLogger.WriteLine(ConsoleColor.Yellow, "Stopping...");
-                e.Cancel = true;
-
-                if (cascBP != null)
-                    cascBP.Stop();
-            };
-
             Process process;
             try
             {

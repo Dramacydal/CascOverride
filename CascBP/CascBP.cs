@@ -62,6 +62,12 @@ namespace CascBP
             // .text:00490853 74 64                                jz      short loc_4908B9
             // .text:0049075D 0F 84 8A 00 00 00                    jz      loc_4907ED
             { 22747, new OffsData(0x00490853 - 0x400000, 0x0049075D - 0x400000) },
+            // .text:00490703 74 64                                   jz      short loc_490769
+            // .text:0049060D 0F 84 8A 00 00 00                       jz      loc_49069D
+            { 22810, new OffsData(0x00490703 - 0x400000, 0x0049060D - 0x400000) },
+            // .text:0049676B 74 64                             jz      short loc_4967D1
+            // .text:00496675 0F 84 8A 00 00 00                 jz      loc_496705
+            { 22908, new OffsData(0x0049676B - 0x400000, 0x00496675 - 0x400000) },
         };
 
         class CascBreakpoint1 : WowBreakpoint
@@ -75,7 +81,7 @@ namespace CascBP
             List<string> Files = new List<string>();
 
 
-            public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
+            public override bool HandleException(ContextWrapper ContextWrapper)
             {
                 //var path = pd.ReadASCIIString(pd.ReadPointer(new IntPtr(ctx.Ebp + 8)));
                 //if (!Files.Contains(path))
@@ -85,7 +91,7 @@ namespace CascBP
                 }
 
                 //Console.WriteLine(path);
-                ctx.Eip += 2;
+                ContextWrapper.Context.Eip += 2;
                 return true;
             }
         }
@@ -98,9 +104,9 @@ namespace CascBP
             {
             }
 
-            public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
+            public override bool HandleException(ContextWrapper ContextWrapper)
             {
-                ctx.Eip += 6;
+                ContextWrapper.Context.Eip += 6;
                 return true;
             }
         }
@@ -113,22 +119,22 @@ namespace CascBP
                 : base(0x00D48CD4 - 0x400000)
             {
             }
-            public override bool HandleException(ref CONTEXT ctx, ProcessDebugger pd)
+            public override bool HandleException(ContextWrapper ContextWrapper)
             {
-                ctx.Esp += 16;
-                ctx.Eip += 3;
+                ContextWrapper.Context.Esp += 16;
+                ContextWrapper.Context.Eip += 3;
                 Console.WriteLine("Triggered");
 
                 try
                 {
-                    var ptr = new IntPtr(ctx.Eax);
+                    var ptr = new IntPtr(ContextWrapper.Context.Eax);
                     if (ptr != IntPtr.Zero)
                     {
-                        ptr = pd.ReadPointer(ptr.Add(292));
+                        ptr = ContextWrapper.Debugger.ReadPointer(ptr.Add(292));
                         if (ptr != IntPtr.Zero)
                         {
                             Console.WriteLine("OK got values array");
-                            Console.WriteLine("Display Id: {0}", pd.ReadInt(ptr.Add(0x5C * 4)));
+                            Console.WriteLine("Display Id: {0}", ContextWrapper.Debugger.ReadInt(ptr.Add(0x5C * 4)));
                         }
                     }
                 }
@@ -173,7 +179,7 @@ namespace CascBP
 
                 PrettyLogger.WriteLine(ConsoleColor.Yellow, "Installing breakpoints...");
                 foreach (var bp in breakpoints)
-                    pd.AddBreakPoint(bp, process.MainModule.BaseAddress);
+                    pd.AddBreakPoint(bp);
 
                 PrettyLogger.WriteLine(ConsoleColor.Magenta, "Successfully attached to {0} PID: {1}.",
                     process.GetVersionInfo(), process.Id);
